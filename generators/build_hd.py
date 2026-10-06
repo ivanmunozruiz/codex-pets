@@ -1,12 +1,20 @@
-"""Monta Barbaroot HD (.codex-pet) a partir de las poses generadas con Magnific."""
+"""Monta una mascota HD (.codex-pet) a partir de sus poses ilustradas.
+
+Uso: python generators/build_hd.py generators/hd/<mascota> pets/<mascota>.codex-pet [preview.png]
+
+La carpeta de la mascota contiene meta.json (id, displayName, description y opciones)
+y poses/{idle,working,review,wave,failed,waiting,jump,walk}.png sobre fondo blanco liso.
+"""
 import json, math, os, sys
 from collections import deque
 from PIL import Image, ImageDraw, ImageFilter, ImageChops
 
-FW, FH = 256, 320          # tamaño de frame (como los sidekicks de Orca)
+FW, FH = 256, 320          # tamaño de frame por defecto (como los sidekicks de Orca)
 COLS, ROWS = 8, 9
 PX = 4                     # tamaño de "pixel" de los efectos superpuestos
-HERE = os.path.dirname(os.path.abspath(__file__))
+POSE_NAMES = ["idle", "working", "review", "wave", "failed", "waiting", "jump", "walk"]
+CFG = {}
+POSES = {}
 
 
 def cutout(path):
@@ -46,14 +54,17 @@ def cutout(path):
     return im.crop(im.getbbox())
 
 
-POSES = {n: cutout(os.path.join(HERE, "poses", n + ".png")) for n in
-         ["idle", "working", "review", "wave", "failed", "waiting", "jump", "walk"]}
-# escala común: que el más alto quepa con margen arriba para los efectos
-TARGET_H = FH - 44
-scale = TARGET_H / max(p.height for p in POSES.values())
-POSES = {k: v.resize((round(v.width * scale), round(v.height * scale)), Image.LANCZOS) for k, v in POSES.items()}
-POSES = {k: v if v.width <= FW - 8 else v.resize((FW - 8, round(v.height * (FW - 8) / v.width)), Image.LANCZOS)
-         for k, v in POSES.items()}
+def load(pet_dir):
+    global FW, FH, GW, GH
+    CFG.update(json.load(open(os.path.join(pet_dir, "meta.json"))))
+    FW, FH = CFG.get("frame", [FW, FH])
+    GW, GH = FW // PX, FH // PX
+    poses = {n: cutout(os.path.join(pet_dir, "poses", n + ".png")) for n in POSE_NAMES}
+    # escala común: que el más alto quepa con margen arriba para los efectos
+    scale = (FH - 44) / max(p.height for p in poses.values())
+    poses = {k: v.resize((round(v.width * scale), round(v.height * scale)), Image.LANCZOS) for k, v in poses.items()}
+    POSES.update({k: v if v.width <= FW - 8 else v.resize((FW - 8, round(v.height * (FW - 8) / v.width)), Image.LANCZOS)
+                  for k, v in poses.items()})
 
 
 def frame():
@@ -119,10 +130,11 @@ def idle():
         breathe = [0, 1, 0, 0, 1, 0][i]
         put(fr, POSES["idle"], dy=-breathe * 2, sy=1 + breathe * 0.012)
         p = Pix()
-        if i in (1, 3, 4):  # vapor del café
+        steam = CFG.get("steam")  # [x, y] en la rejilla de efectos, p.ej. sobre una taza
+        if steam and i in (1, 3, 4):
             for k in range(3):
-                y = 34 - k * 3 - (i % 2)
-                p.d.point((22 + ((k + i) % 2), y), fill=STEAM)
+                y = steam[1] - k * 3 - (i % 2)
+                p.d.point((steam[0] + ((k + i) % 2), y), fill=STEAM)
         p.apply(fr, outline=False)
         out.append(fr)
     return out
@@ -158,7 +170,8 @@ def jump():
     spec = [("idle", 0, 1.06, 0.9), ("jump", -24, 1, 1), ("jump", -44, 1, 1), ("jump", -24, 1, 1), ("idle", 0, 1.03, 0.96)]
     for i, (pose, dy, sx, sy) in enumerate(spec):
         fr = frame()
-        put(fr, POSES[pose], dy=dy, sx=sx, sy=sy)
+        tilt = CFG.get("jump_tilt", 0) * (1 if i == 2 else 0.5) if pose == "jump" else 0  # p.ej. caballito
+        put(fr, POSES[pose], dy=dy, sx=sx, sy=sy, rot=tilt)
         p = Pix()
         if i == 2:
             for x, y in ((8, 16), (56, 22), (52, 6), (12, 4)):
@@ -243,7 +256,8 @@ ROWS_DEF = [
 ]
 
 
-def main(out_dir, preview):
+def main(pet_dir, out_dir, preview=None):
+    load(pet_dir)
     sheet = Image.new("RGBA", (COLS * FW, ROWS * FH), (0, 0, 0, 0))
     anims = {}
     for r, (name, fn, durs) in enumerate(ROWS_DEF):
@@ -254,16 +268,16 @@ def main(out_dir, preview):
         anims[name] = {"row": r, "frames": len(frames), "frameDurationsMs": durs}
     os.makedirs(out_dir, exist_ok=True)
     sheet.save(os.path.join(out_dir, "spritesheet.webp"), lossless=True, quality=100, method=6)
-    meta = {"id": "barbaroot", "displayName": "Barbaroot",
-            "description": "Hacker hipster calvo de barba negra con canas: café de especialidad, gafas de pasta, franela y portátil con pegatinas.",
+    meta = {"id": CFG["id"], "displayName": CFG["displayName"], "description": CFG["description"],
             "spritesheetPath": "spritesheet.webp", "frame": {"width": FW, "height": FH}, "fps": 8,
             "defaultAnimation": "idle", "animations": anims}
     with open(os.path.join(out_dir, "pet.json"), "w") as fh:
         json.dump(meta, fh, indent=2, ensure_ascii=False)
-    prev = Image.new("RGBA", sheet.size, (40, 44, 52, 255)); prev.alpha_composite(sheet)
-    prev.convert("RGB").resize((sheet.width // 3, sheet.height // 3), Image.LANCZOS).save(preview)
+    if preview:
+        prev = Image.new("RGBA", sheet.size, (40, 44, 52, 255)); prev.alpha_composite(sheet)
+        prev.convert("RGB").resize((sheet.width // 3, sheet.height // 3), Image.LANCZOS).save(preview)
     print(sheet.size, os.path.getsize(os.path.join(out_dir, "spritesheet.webp")) // 1024, "KB")
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    main(*sys.argv[1:4])

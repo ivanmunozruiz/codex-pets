@@ -15,6 +15,7 @@ DEFAULT_ANIMS = {
     "running": {"row": 7, "frames": 6}, "review": {"row": 8, "frames": 6},
 }
 BG = (40, 44, 52)
+GIF_MAX_W = 200
 GIF_ORDER = ["idle", "running", "waiting", "review", "failed", "waving", "jumping", "running-right"]
 
 
@@ -33,6 +34,8 @@ def main(bundle, out_prefix):
             for c in range(a["frames"]):
                 f = Image.new("RGBA", (fw, fh), BG + (255,))
                 f.alpha_composite(sheet.crop((c * fw, a["row"] * fh, (c + 1) * fw, (a["row"] + 1) * fh)))
+                if fw > GIF_MAX_W:  # GIF ligero para el README
+                    f = f.resize((GIF_MAX_W, round(fh * GIF_MAX_W / fw)), Image.LANCZOS)
                 frames.append(f.convert("RGB"))
                 durations.append(min(int(durs[c]), 900))
     os.makedirs(os.path.dirname(out_prefix), exist_ok=True)

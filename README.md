@@ -2,10 +2,22 @@
 
 Mascotas personalizadas en formato **`.codex-pet`** para el IDE Orca (y cualquier app que entienda el mismo formato). Cada mascota reacciona a lo que hacen tus agentes: trabaja cuando ellos trabajan, espera cuando necesitan input, revisa cuando terminan y entra en pánico cuando algo falla.
 
-| Barbaroot HD | Barbaroot | Pikorca |
+## Galería
+
+| Barbaroot HD | Barbaroot Rider | Capi |
 |:---:|:---:|:---:|
-| ![Barbaroot HD](docs/previews/barbaroot-hd.gif) | ![Barbaroot](docs/previews/barbaroot.gif) | ![Pikorca](docs/previews/pikorca.gif) |
-| Hacker hipster calvo, barba negra con canas, franela y café. Ilustración generada con IA. | El mismo hacker en pixel art clásico de 48×52 dibujado por código. | Orca SRE de guardia con auriculares, lupa para las reviews y timón de Helm. |
+| ![Barbaroot HD](docs/previews/barbaroot-hd.gif) | ![Barbaroot Rider](docs/previews/barbaroot-rider.gif) | ![Capi](docs/previews/capi.gif) |
+| Hacker hipster calvo, barba negra con canas, franela y café de especialidad. | Barbaroot en su maxi scooter: casco jet, caballitos y humo cuando algo peta. | Capibara zen con mate, cascos y una mandarina en la cabeza. |
+
+| Neko.exe | Kraken | Prodzilla |
+|:---:|:---:|:---:|
+| ![Neko.exe](docs/previews/neko.gif) | ![Kraken](docs/previews/kraken.gif) | ![Prodzilla](docs/previews/prodzilla.gif) |
+| Gato hacker cyberpunk con visor neón y sudadera morada. | Pulpo multitarea: un portátil por tentáculo y patito de goma para debuggear. | Dragoncito guardián de producción. Si algo falla, echa fuego. |
+
+| Bitbot | Barbaroot (pixel) | Pikorca |
+|:---:|:---:|:---:|
+| ![Bitbot](docs/previews/bitbot.gif) | ![Barbaroot](docs/previews/barbaroot.gif) | ![Pikorca](docs/previews/pikorca.gif) |
+| Robot retro con un monitor CRT por cara que cambia según el estado. | El Barbaroot original en pixel art de 48×52 dibujado por código. | Orca SRE de guardia con auriculares, lupa y timón de Helm. |
 
 ## Instalación en Orca
 
@@ -75,18 +87,33 @@ python -m venv .venv && .venv/bin/pip install pillow
 .venv/bin/python generators/pikorca.py   pets/pikorca.codex-pet   /tmp/pikorca.png
 .venv/bin/python generators/barbaroot.py pets/barbaroot.codex-pet /tmp/barbaroot.png
 
-# Versión HD a partir de las poses ilustradas (generators/barbaroot-hd/poses/)
-.venv/bin/python generators/barbaroot-hd/build.py pets/barbaroot-hd.codex-pet /tmp/barbaroot-hd.png
+# Mascotas HD a partir de sus poses ilustradas (generators/hd/<mascota>/)
+.venv/bin/python generators/build_hd.py generators/hd/capi pets/capi.codex-pet /tmp/capi.png
 
 # Vistas previas del README
-.venv/bin/python generators/preview.py pets/barbaroot-hd.codex-pet docs/previews/barbaroot-hd
+.venv/bin/python generators/preview.py pets/capi.codex-pet docs/previews/capi
 ```
 
-Barbaroot HD sigue este proceso:
+### Crear una mascota HD nueva
 
-1. Se genera **una pose por estado** con un modelo de imagen (aquí Nano Banana Pro en [Magnific](https://www.magnific.com)), usando la primera pose como referencia para mantener al personaje.
-2. `build.py` recorta el fondo, escala todas las poses por igual y las anima: rebote, respiración, temblores y saltos.
-3. Encima añade efectos en pixel art: vapor del café, bits, bocadillos, ✅, "!" y corazones.
+1. Genera **una pose por estado** con un modelo de imagen, sobre fondo blanco liso: `idle`, `working`, `review`, `wave`, `failed`, `waiting`, `jump` y `walk` (andando hacia la derecha). Para que el personaje no cambie, genera primero `idle` y úsala como referencia en las demás. Las de este repo se hicieron con Nano Banana Pro en [Magnific](https://www.magnific.com).
+2. Guárdalas en `generators/hd/<mascota>/poses/<pose>.png` y añade un `meta.json`:
+
+   ```json
+   {
+     "id": "mi-mascota",
+     "displayName": "Mi Mascota",
+     "description": "...",
+     "frame": [256, 320],
+     "steam": [22, 34],
+     "jump_tilt": 0
+   }
+   ```
+
+   - `frame` es opcional (por defecto 256×320). Usa uno más ancho para personajes apaisados, como el de la scooter (`[320, 288]`).
+   - `steam` es opcional: dibuja vapor en esa posición de la rejilla de efectos (un píxel de efecto equivale a 4 px). Sirve para una taza de café.
+   - `jump_tilt` es opcional: inclina la pose de salto, por ejemplo para hacer un caballito.
+3. Ejecuta `build_hd.py`. Recorta el fondo, escala todas las poses por igual, las anima (rebote, respiración, temblores y saltos) y añade efectos en pixel art: bits, bocadillos, ✅, "!", humo, estrellas y corazones.
 
 ## Licencia
 
