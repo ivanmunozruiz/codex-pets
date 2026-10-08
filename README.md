@@ -14,6 +14,11 @@ Mascotas personalizadas en formato **`.codex-pet`** para el IDE Orca (y cualquie
 | ![Neko.exe](docs/previews/neko.gif) | ![Kraken](docs/previews/kraken.gif) | ![Prodzilla](docs/previews/prodzilla.gif) |
 | Gato hacker cyberpunk con visor neón y sudadera morada. | Pulpo multitarea: un portátil por tentáculo y patito de goma para debuggear. | Dragoncito guardián de producción. Si algo falla, echa fuego. |
 
+| Patito Debug | Pager | Dockerina |
+|:---:|:---:|:---:|
+| ![Patito Debug](docs/previews/patito.gif) | ![Pager](docs/previews/pager.gif) | ![Dockerina](docs/previews/dockerina.gif) |
+| Patito de goma detective para hacer rubber-duck debugging, con gabardina y lupa. | El busca de guardia: bosteza esperando y vibra en rojo cuando salta una alerta. | Ballenita que apila contenedores en el lomo y se le desmoronan cuando algo falla. |
+
 | Bitbot | Barbaroot (pixel) | Pikorca |
 |:---:|:---:|:---:|
 | ![Bitbot](docs/previews/bitbot.gif) | ![Barbaroot](docs/previews/barbaroot.gif) | ![Pikorca](docs/previews/pikorca.gif) |

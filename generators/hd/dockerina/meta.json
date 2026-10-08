@@ -1,0 +1,5 @@
+{
+  "id": "dockerina",
+  "displayName": "Dockerina",
+  "description": "Ballenita marinera que carga contenedores en el lomo. Apila uno más cuando trabaja y se le desmorona la pila cuando algo falla."
+}
