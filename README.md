@@ -24,6 +24,11 @@ Mascotas personalizadas en formato **`.codex-pet`** para el IDE Orca (y cualquie
 | ![Bitbot](docs/previews/bitbot.gif) | ![Barbaroot](docs/previews/barbaroot.gif) | ![Pikorca](docs/previews/pikorca.gif) |
 | Robot retro con un monitor CRT por cara que cambia según el estado. | El Barbaroot original en pixel art de 48×52 dibujado por código. | Orca SRE de guardia con auriculares, lupa y timón de Helm. |
 
+| Unicornio | Unicornio Toon |
+|:---:|:---:|
+| ![Unicornio](docs/previews/unicornio.gif) | ![Unicornio Toon](docs/previews/unicornio-toon.gif) |
+| Unicornio dev con sudadera, gafas de sol y crin arcoíris. Se le chamusca la crin cuando algo falla. | El mismo unicornio en versión ilustrada, sin píxeles. |
+
 ## Instalación en Orca
 
 1. Descarga la carpeta de la mascota que quieras de [`pets/`](pets/). Por ejemplo, `pets/barbaroot-hd.codex-pet/` (necesitas los dos ficheros: `pet.json` y `spritesheet.webp`).
