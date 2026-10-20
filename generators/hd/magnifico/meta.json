@@ -1,0 +1,10 @@
+{
+  "id": "magnifico",
+  "displayName": "Magnífico",
+  "description": "La M de Magnific con zapatillas rosas. Amplía con su lupa entre destellos cuando trabaja, enseña un cuadro nítido en las reviews y se emborrona en píxeles de baja resolución cuando algo falla.",
+  "frame": [
+    320,
+    288
+  ],
+  "outline": "#d8d8e0"
+}

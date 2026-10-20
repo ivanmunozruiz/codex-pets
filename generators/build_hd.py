@@ -54,6 +54,17 @@ def cutout(path):
     return im.crop(im.getbbox())
 
 
+def outlined(im, color, n=2):
+    """Contorno de n px alrededor de la silueta, para que un personaje oscuro se vea en temas oscuros."""
+    padded = Image.new("RGBA", (im.width + 2 * n, im.height + 2 * n), (0, 0, 0, 0))
+    padded.paste(im, (n, n))
+    ring = padded.getchannel("A").point(lambda a: 255 if a > 96 else 0).filter(ImageFilter.MaxFilter(2 * n + 1))
+    out = Image.new("RGBA", padded.size, color)
+    out.putalpha(ring)
+    out.alpha_composite(padded)
+    return out
+
+
 def load(pet_dir):
     global FW, FH, GW, GH
     CFG.update(json.load(open(os.path.join(pet_dir, "meta.json"))))
@@ -63,6 +74,8 @@ def load(pet_dir):
     # escala común: que el más alto quepa con margen arriba para los efectos
     scale = (FH - 44) / max(p.height for p in poses.values())
     poses = {k: v.resize((round(v.width * scale), round(v.height * scale)), Image.LANCZOS) for k, v in poses.items()}
+    if CFG.get("outline"):  # p.ej. "#d8d8e0" para un personaje oscuro
+        poses = {k: outlined(v, CFG["outline"]) for k, v in poses.items()}
     POSES.update({k: v if v.width <= FW - 8 else v.resize((FW - 8, round(v.height * (FW - 8) / v.width)), Image.LANCZOS)
                   for k, v in poses.items()})
 

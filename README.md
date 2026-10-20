@@ -39,6 +39,11 @@ Mascotas personalizadas en formato **`.codex-pet`** para el IDE Orca (y cualquie
 | ![Tostada 418](docs/previews/tostada-418.gif) | ![Lince Linter](docs/previews/lince-linter.gif) | ![Fantasmita 404](docs/previews/fantasmita-404.gif) |
 | Tostada que espera asomada a la tostadora y se quema cuando algo falla. | Lince revisor con boli rojo: check verde en las reviews, hoja llena de tachones si falla. | Fantasma que busca páginas perdidas con su lupa y se desintegra en píxeles si algo falla. |
 
+| Magnífico |
+|:---:|
+| ![Magnífico](docs/previews/magnifico.gif) |
+| La M de Magnific: amplía con su lupa cuando trabaja y se emborrona en baja resolución si algo falla. |
+
 ## Instalación en Orca
 
 1. Descarga la carpeta de la mascota que quieras de [`pets/`](pets/). Por ejemplo, `pets/barbaroot-hd.codex-pet/` (necesitas los dos ficheros: `pet.json` y `spritesheet.webp`).
@@ -133,6 +138,7 @@ python -m venv .venv && .venv/bin/pip install pillow
    - `frame` es opcional (por defecto 256×320). Usa uno más ancho para personajes apaisados, como el de la scooter (`[320, 288]`).
    - `steam` es opcional: dibuja vapor en esa posición de la rejilla de efectos (un píxel de efecto equivale a 4 px). Sirve para una taza de café.
    - `jump_tilt` es opcional: inclina la pose de salto, por ejemplo para hacer un caballito.
+   - `outline` es opcional: un color (p. ej. `"#d8d8e0"`) para dibujar un contorno de 2 px alrededor del personaje. Sirve para que uno muy oscuro se vea en temas oscuros, como Magnífico.
 3. Ejecuta `build_hd.py`. Recorta el fondo, escala todas las poses por igual, las anima (rebote, respiración, temblores y saltos) y añade efectos en pixel art: bits, bocadillos, ✅, "!", humo, estrellas y corazones.
 
 ## Licencia
