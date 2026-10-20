@@ -1,0 +1,5 @@
+{
+  "id": "erizo-merge",
+  "displayName": "Erizo Merge",
+  "description": "Erizo con las púas hechas de ramas de git. Le brillan las ramas cuando trabaja, se peina las púas en línea recta para aprobar las reviews y se le enredan en un nudo rojo cuando hay conflicto."
+}

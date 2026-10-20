@@ -29,6 +29,16 @@ Mascotas personalizadas en formato **`.codex-pet`** para el IDE Orca (y cualquie
 | ![Unicornio](docs/previews/unicornio.gif) | ![Unicornio Toon](docs/previews/unicornio-toon.gif) |
 | Unicornio dev con sudadera, gafas de sol y crin arcoíris. Se le chamusca la crin cuando algo falla. | El mismo unicornio en versión ilustrada, sin píxeles. |
 
+| Erizo Merge | Cafetín | Yeti Legacy |
+|:---:|:---:|:---:|
+| ![Erizo Merge](docs/previews/erizo-merge.gif) | ![Cafetín](docs/previews/cafetin.gif) | ![Yeti Legacy](docs/previews/yeti-legacy.gif) |
+| Erizo con púas de ramas de git que se le enredan en un nudo rojo cuando hay conflicto. | Taza de café con batería: se vacía trabajando y se rellena con latte art en las reviews. | Yeti abuelo con monitor CRT que mantiene el código antiguo. |
+
+| Tostada 418 | Lince Linter | Fantasmita 404 |
+|:---:|:---:|:---:|
+| ![Tostada 418](docs/previews/tostada-418.gif) | ![Lince Linter](docs/previews/lince-linter.gif) | ![Fantasmita 404](docs/previews/fantasmita-404.gif) |
+| Tostada que espera asomada a la tostadora y se quema cuando algo falla. | Lince revisor con boli rojo: check verde en las reviews, hoja llena de tachones si falla. | Fantasma que busca páginas perdidas con su lupa y se desintegra en píxeles si algo falla. |
+
 ## Instalación en Orca
 
 1. Descarga la carpeta de la mascota que quieras de [`pets/`](pets/). Por ejemplo, `pets/barbaroot-hd.codex-pet/` (necesitas los dos ficheros: `pet.json` y `spritesheet.webp`).
